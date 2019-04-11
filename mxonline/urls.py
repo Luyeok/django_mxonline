@@ -16,7 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import xadmin
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
+    # 直接返回index.html静态页面。
+    # 对于纯静态的页面，就采用这样的方法来返回。
+    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+path('login/', TemplateView.as_view(template_name="login.html"), name="login"),
 ]

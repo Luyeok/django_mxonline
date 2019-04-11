@@ -129,4 +129,10 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# 这里的STATIC_URL是用来匹配html中的/static/的，从而知道哪些文件是静态文件；
+# django默认会从每个APP下面的/static文件夹中去寻找静态资源文件
+STATIC_URL = "/static/"
+
+# 这里的STATICFILES_DIRS是用来增加除了每个app下/static文件夹之外的路径的；
+# 这里，我们告诉django，除了去每个app下去寻找静态资源，还需要去我们定义的这个地方来寻找静态资源。
+STATICFILES_DIRS=(os.path.join(BASE_DIR, "static"),)
