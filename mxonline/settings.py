@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 定义重载authentication的方法
+AUTHENTICATION_BACKENDS=(
+    'users.views.CustomBackend',
+)
+
 
 # Application definition
 
