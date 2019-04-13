@@ -18,12 +18,13 @@ from django.urls import path
 import xadmin
 from django.views.generic import TemplateView
 
-from users.views import mylogin
+from users.views import LoginView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     # 直接返回index.html静态页面。
     # 对于纯静态的页面，就采用这样的方法来返回。
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
-    path('login/', mylogin, name="login"),
+    path('login/', LoginView.as_view(), name="login"),
+    # 当使用类里面的View函数的时候，我们往往是使用类当中的as_view方法，这个方法返回了一个函数的句柄；
 ]
