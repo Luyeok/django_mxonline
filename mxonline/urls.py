@@ -14,11 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 import xadmin
 from django.views.generic import TemplateView
 
-from users.views import LoginView
+from users.views import LoginView, RegisterView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -27,4 +27,6 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name="index"),
     path('login/', LoginView.as_view(), name="login"),
     # 当使用类里面的View函数的时候，我们往往是使用类当中的as_view方法，这个方法返回了一个函数的句柄；
+    path('register/', RegisterView.as_view(),name="register"),
+    path('captcha/', include('captcha.urls')),
 ]

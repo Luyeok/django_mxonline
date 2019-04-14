@@ -8,6 +8,9 @@ from .forms import LoginForm
 
 # Create your views here.
 
+class RegisterView(View):
+    def get(self, request):
+        return render(request, "register.html")
 
 # 使用类进行登陆
 # django中，比较推荐使用这种基于类的视图函数
@@ -19,6 +22,7 @@ class LoginView(View):
 
     def post(self,request):
         login_form=LoginForm(request.POST)
+        # 这里的LoginForm是用来验证表单有效性的。
         if login_form.is_valid():
             username = request.POST.get("username", "")
             password = request.POST.get("password", "")
@@ -26,8 +30,10 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 return render(request, "index.html")
+            else:
+                return render(request,"login.html",{"msg":"用户名或密码错误！"})
         else:
-            return render(request, "login.html", {"msg": "用户名或密码错误！"})
+            return render(request, "login.html", {"login_form":login_form})
 
 
 class CustomBackend(ModelBackend):
