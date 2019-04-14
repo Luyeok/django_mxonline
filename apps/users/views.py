@@ -4,13 +4,30 @@ from django.contrib.auth.backends import ModelBackend
 from .models import UserProfile
 from django.db.models import Q
 from django.views.generic.base import View
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 
 class RegisterView(View):
     def get(self, request):
-        return render(request, "register.html")
+        register_form = RegisterForm()
+        return render(request, "register.html",{'register_form':register_form})
+
+    def post(self,request):
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            username = request.POST.get("email", "")
+            password = request.POST.get("password", "")
+            user_profile = UserProfile()
+            user_profile.username= username
+            user_profile.email=username
+            user_profile.password=make_password(password)
+            user_profile.save()
+            return render(request,'index.html')
+        else:
+            pass
+
 
 # 使用类进行登陆
 # django中，比较推荐使用这种基于类的视图函数
