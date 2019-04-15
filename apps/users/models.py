@@ -32,6 +32,7 @@ class EmailVerifyRecord(models.Model):
                                                              "找回密码")),
                                  max_length=10,verbose_name='验证码类型')
     send_time = models.DateTimeField(default=datetime.now,verbose_name='发送时间')
+    is_active= models.BooleanField(default=0,verbose_name="激活状态")
 
     class Meta:
         verbose_name="邮箱验证码"

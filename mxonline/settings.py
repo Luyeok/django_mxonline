@@ -142,3 +142,10 @@ STATIC_URL = "/static/"
 # 这里的STATICFILES_DIRS是用来增加除了每个app下/static文件夹之外的路径的；
 # 这里，我们告诉django，除了去每个app下去寻找静态资源，还需要去我们定义的这个地方来寻找静态资源。
 STATICFILES_DIRS=(os.path.join(BASE_DIR, "static"),)
+
+EMAIL_HOST="smtp.qq.com"
+EMAIL_PORT=25
+EMAIL_HOST_USER="1758801140@qq.com"
+EMAIL_HOST_PASSWORD="wvzqoiziqwopbcca"
+EMAIL_USE_TLS=False
+EMAIL_FROM="1758801140@qq.com"
