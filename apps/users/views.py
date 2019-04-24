@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile
+from .models import UserProfile, EmailVerifyRecord
 from django.db.models import Q
 from django.views.generic.base import View
 from .forms import LoginForm, RegisterForm
@@ -24,11 +24,23 @@ class RegisterView(View):
             user_profile.username= username
             user_profile.email=username
             user_profile.password=make_password(password)
+            user_profile.is_active=False
             user_profile.save()
             send_register_email(username, "register")
             return render(request,'login.html')
         else:
             return render(request,'register.html',{"register_form":register_form})
+
+class ActiveUserView(View):
+    def get(self,request, active_code):
+        all_records= EmailVerifyRecord.objects.filter(code=active_code)
+        if all_records:
+            for record in all_records:
+                email=record.email
+                user = UserProfile.objects.get(email=email)
+                user.is_active=True
+                user.save()
+            return render(request, "login.html")
 
 
 # 使用类进行登陆
@@ -47,8 +59,11 @@ class LoginView(View):
             password = request.POST.get("password", "")
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                return render(request, "index.html")
+                if user.is_active:
+                    login(request, user)
+                    return render(request, "index.html")
+                else:
+                    return render(request,"login.html",{'msg':"用户未激活。"})
             else:
                 return render(request,"login.html",{"msg":"用户名或密码错误！"})
         else:

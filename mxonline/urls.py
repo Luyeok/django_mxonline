@@ -18,7 +18,7 @@ from django.urls import path,include
 import xadmin
 from django.views.generic import TemplateView
 
-from users.views import LoginView, RegisterView
+from users.views import LoginView, RegisterView, ActiveUserView
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -29,4 +29,5 @@ urlpatterns = [
     # 当使用类里面的View函数的时候，我们往往是使用类当中的as_view方法，这个方法返回了一个函数的句柄；
     path('register/', RegisterView.as_view(),name="register"),
     path('captcha/', include('captcha.urls')),
+    path('active/<str:active_code>', ActiveUserView.as_view(),name='user_active'),
 ]
