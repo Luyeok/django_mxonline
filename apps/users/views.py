@@ -19,15 +19,18 @@ class RegisterView(View):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             username = request.POST.get("email", "")
-            password = request.POST.get("password", "")
-            user_profile = UserProfile()
-            user_profile.username= username
-            user_profile.email=username
-            user_profile.password=make_password(password)
-            user_profile.is_active=False
-            user_profile.save()
-            send_register_email(username, "register")
-            return render(request,'login.html')
+            if UserProfile.objects.get(username=username):
+                return render(request,"register.html",{"register_form":register_form,'msg':"用户已存在"})
+            else:
+                password = request.POST.get("password", "")
+                user_profile = UserProfile()
+                user_profile.username= username
+                user_profile.email=username
+                user_profile.password=make_password(password)
+                user_profile.is_active=False
+                user_profile.save()
+                send_register_email(username, "register")
+                return render(request,'login.html')
         else:
             return render(request,'register.html',{"register_form":register_form})
 
@@ -40,7 +43,9 @@ class ActiveUserView(View):
                 user = UserProfile.objects.get(email=email)
                 user.is_active=True
                 user.save()
-            return render(request, "login.html")
+        else:
+            return render(request, "active_fail.html")
+        return render(request, "login.html")
 
 
 # 使用类进行登陆
